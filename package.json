@@ -1,0 +1,18 @@
+{
+  "name": "discordbot",
+  "version": "1.0.0",
+  "description": "discord bot for nadia's art server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/szge/discordartbot/issues"
+  },
+  "homepage": "https://github.com/szge/discordartbot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3"
+  }
+}
