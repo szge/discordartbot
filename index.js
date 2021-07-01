@@ -25,9 +25,8 @@ const adminRole = "853808936133591080";
 const submittedRole = "859794283878678568";
 
 client.on('ready', () => {
-    console.log('Logged in as ${client.user.tag}!');
+    console.log(`Logged in as ${client.user.tag}!`);
     console.log('I am ready to do stuff');
-    dailyCheck();
 });
 
 function dailyCheck() {
@@ -85,7 +84,8 @@ client.on('message', msg => {
 
     // if user posts in submission channel
     if (submissionList.includes(msg.channel.id) && msg.attachments.size > 0) {
-        msg.reply('your assignment submission has been acknowledged! good job');
+        msg.reply('your assignment submission has been acknowledged! good job\n\
+        (if you don\'t have the "posted in assignments" role message a mod to report a bot issue)');
         msg.member.roles.add(submittedRole);
     }
 });
