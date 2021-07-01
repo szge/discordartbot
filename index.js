@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 
 const client = new Discord.Client();
 
+var didDailyCheck = false;
+
 // list of submission channels
 const submissionList = [
     "859266797680984095", // test channel
@@ -20,10 +22,17 @@ const submissionList = [
 
 const adminRole = "853808936133591080";
 
+const submittedRole = "859794283878678568";
+
 client.on('ready', () => {
     console.log('Logged in as ${client.user.tag}!');
     console.log('I am ready to do stuff');
+    dailyCheck();
 });
+
+function dailyCheck() {
+    
+}
 
 client.on('message', msg => {
     if (msg.author.bot) return;
@@ -77,6 +86,7 @@ client.on('message', msg => {
     // if user posts in submission channel
     if (submissionList.includes(msg.channel.id) && msg.attachments.size > 0) {
         msg.reply('your assignment submission has been acknowledged! good job');
+        msg.member.roles.add(submittedRole);
     }
 });
 
