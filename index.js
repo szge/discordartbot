@@ -23,18 +23,10 @@ const assignmentList = [
 // figures submission channel
 const figuresChannel = "853855324259745792";
 
-const assignmentSubRole = "859794283878678568";
-
-const figuresSubRole = "858450559852740609";
-
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
     console.log('I am ready to do stuff');
 });
-
-function dailyCheck() {
-    
-}
 
 client.on('message', msg => {
     if (msg.author.bot) return;
@@ -52,6 +44,8 @@ client.on('message', msg => {
                 help_text += '**artbot admin test**\n';
                 help_text += '**artbot kick test**\n';
                 help_text += '**artbot clear assignment submissions**: [admin] clear the assignment submission role manually '
+                help_text += '(ONLY if you know what you\'re doing)\n';
+                help_text += '**artbot clear figure submissions**: [admin] clear the figures submission role manually '
                 help_text += '(ONLY if you know what you\'re doing)\n';
                 msg.reply(help_text);
                 break;
@@ -90,7 +84,17 @@ client.on('message', msg => {
             }
             case 'artbot clear assignment submissions': {
                 if (msg.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-                    msg.reply('test');
+                    clear_role(msg, "posted in assignments");
+                    msg.reply('cleared assignment submissions');
+                } else {
+                    msg.reply('you do not have permissions to do that (admin)');
+                }
+                break;
+            }
+            case 'artbot clear figure submissions': {
+                if (msg.member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+                    clear_role(msg, "posted in figures");
+                    msg.reply('cleared figure submissions');
                 } else {
                     msg.reply('you do not have permissions to do that (admin)');
                 }
@@ -109,14 +113,38 @@ client.on('message', msg => {
         var message = 'your assignment submission has been acknowledged! good job\n';
         message += '(if you don\'t have the "posted in assignments" role message a mod to report a bot issue)';
         msg.reply(message);
-        msg.member.roles.add(assignmentSubRole);
+        var role = msg.guild.roles.cache.find(role => role.name === "posted in assignments");
+        msg.member.roles.add(role);
     } else if (msg.channel.id == figuresChannel && msg.attachments.size > 0) {
         // submitted figures
         var message = 'your figures submission has been acknowledged! good job\n';
         message += '(if you don\'t have the "posted in figures" role message a mod to report a bot issue)';
         msg.reply(message);
-        msg.member.roles.add(figuresSubRole);
+        var role = msg.guild.roles.cache.find(role => role.name === "posted in figures");
+        msg.member.roles.add(role);
     }
 });
+
+function give_strike() {
+    
+}
+
+// remove all users from a given role provided a name
+function clear_role(message, role_name) {
+    // actually removing the role from users reaches the Discord API rate limit
+    // so just delete the role and create a new one with the same stuff
+    const role = message.guild.roles.cache.find(role => role.name === role_name);
+    message.guild.roles.create({
+        data: {
+            name: role.name,
+            color: role.color,
+            hoist: role.hoist,
+            position: role.position,
+            permissions: role.permissions,
+            mentionable: role.mentionable
+        }
+    });
+    role.delete();
+}
 
 client.login(token);
